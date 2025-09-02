@@ -4,52 +4,47 @@
   # Which nixpkgs channel to use.
   channel = "stable-24.05"; # or "unstable"
 
-  # Use https://search.nixos.org/packages to find packages
+  # Use https://search.nixos.org/packages to find packages.
+  # We add git, docker, and docker-compose as needed for the project.
   packages = [
-    # pkgs.go
-    # pkgs.python311
-    # pkgs.python311Packages.pip
-    # pkgs.nodejs_20
-    # pkgs.nodePackages.nodemon
+    pkgs.git
+    pkgs.docker
+    pkgs.docker-compose
   ];
 
   # Sets environment variables in the workspace
   env = {};
   idx = {
     # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
-    extensions = [
-      # "vscodevim.vim"
-    ];
+    extensions = [];
 
-    # Enable previews
+    # Enable previews and configure one for the web application
     previews = {
       enable = true;
       previews = {
-        # web = {
-        #   # Example: run "npm run dev" with PORT set to IDX's defined port for previews,
-        #   # and show it in IDX's web preview panel
-        #   command = ["npm" "run" "dev"];
-        #   manager = "web";
-        #   env = {
-        #     # Environment variables to set for your server
-        #     PORT = "$PORT";
-        #   };
-        # };
+        # This preview will run the Docker container after it's built
+        # and expose it on a URL for you to test.
+        web = {
+          # The command to run. We use the tag "webtor-test-build" that we used before.
+          # It maps the internal port 8080 to the preview port provided by IDX.
+          command = ["docker" "run" "--rm" "-p" "$PORT:8080" "webtor-test-build"];
+          manager = "web";
+        };
       };
     };
 
     # Workspace lifecycle hooks
     workspace = {
       # Runs when a workspace is first created
-      onCreate = {
-        # Example: install JS dependencies from NPM
-        # npm-install = "npm install";
-      };
+      onCreate = {};
       # Runs when the workspace is (re)started
-      onStart = {
-        # Example: start a background task to watch and re-build backend code
-        # watch-backend = "npm run watch-backend";
-      };
+      onStart = {};
+    };
+
+    # Enable the Docker feature to run the Docker daemon automatically.
+    # This is the key fix for the "Cannot connect to the Docker daemon" error.
+    features = {
+        docker.enable = true;
     };
   };
 }

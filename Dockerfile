@@ -190,7 +190,7 @@ WORKDIR /app
 
 COPY --from=build-web-ui /app/src/web-ui .
 
-RUN npm install
+RUN npm install jest
 
 RUN npm run build
 

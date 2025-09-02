@@ -4,20 +4,18 @@
   # Which nixpkgs channel to use.
   channel = "stable-24.05";
 
-  # 1. Install the Docker command-line tool permanently.
+  # 1. Install packages permanently. Each package must be on its own line
+  # or separated by a space.
   packages = [
     pkgs.docker
-    pkgs.docker-compose # Included as per your repository's README
+    pkgs.docker-compose
   ];
 
   # 2. Enable and run the Docker service (daemon) in the background.
-  # This is the most critical part to fix the "Cannot connect" error.
   features = {
     docker.enable = true;
   };
 
-  idx = {
-    # This section is for IDX-specific settings like extensions and previews.
-    # Keeping it empty is fine if we don't need to customize those.
-  };
+  # 3. IDX-specific settings (can be left as is).
+  idx = {};
 }

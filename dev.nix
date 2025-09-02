@@ -7,6 +7,7 @@
   features.docker = true;
   # Add your desired packages
   packages = [
-    pkgs.git
+    pkgs.git,
+    pkgs.docker
   ];
 }

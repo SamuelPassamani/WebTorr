@@ -189,8 +189,11 @@ FROM node:$NODE_VER AS build-web-ui-assets
 WORKDIR /app
 
 COPY --from=build-web-ui /app/src/web-ui .
+COPY web-ui-tests/ /app/tests/
 
 RUN npm install jest
+RUN npm pkg set 'scripts.test'='jest tests/'
+RUN npm test
 
 RUN npm run build
 
